@@ -50,7 +50,7 @@ public class AuthorizedRoleController extends TabController<AuthorizedRoleModel>
     private Pin bondedRolesPin, selectedUserIdentityPin;
 
     public AuthorizedRoleController(ServiceProvider serviceProvider) {
-        super(new AuthorizedRoleModel(List.of(BondedRoleType.values())), NavigationTarget.AUTHORIZED_ROLE);
+        super(new AuthorizedRoleModel(List.of(BondedRoleType.values())), NavigationTarget.AUTHORIZED_ROLE, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         authorizedBondedRolesService = serviceProvider.getBondedRolesService().getAuthorizedBondedRolesService();

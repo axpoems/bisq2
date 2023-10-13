@@ -37,7 +37,7 @@ public class BurnBsqController extends TabController<BurnBsqModel> {
     private final ServiceProvider serviceProvider;
 
     public BurnBsqController(ServiceProvider serviceProvider) {
-        super(new BurnBsqModel(), NavigationTarget.BURN_BSQ);
+        super(new BurnBsqModel(), NavigationTarget.BURN_BSQ, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = new BurnBsqView(model, this);

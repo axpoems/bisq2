@@ -40,7 +40,7 @@ public class AcademyController extends TabController<AcademyModel> {
     private final AcademyView view;
 
     public AcademyController(ServiceProvider serviceProvider) {
-        super(new AcademyModel(), NavigationTarget.ACADEMY);
+        super(new AcademyModel(), NavigationTarget.ACADEMY, serviceProvider);
 
         this.serviceProvider = serviceProvider;
 

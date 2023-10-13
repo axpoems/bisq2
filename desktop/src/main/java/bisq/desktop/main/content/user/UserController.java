@@ -39,7 +39,7 @@ public class UserController extends TabController<UserModel> {
     private final UserView view;
 
     public UserController(ServiceProvider serviceProvider) {
-        super(new UserModel(), NavigationTarget.USER);
+        super(new UserModel(), NavigationTarget.USER, serviceProvider);
 
         this.serviceProvider = serviceProvider;
 

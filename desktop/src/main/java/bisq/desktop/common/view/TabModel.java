@@ -17,7 +17,9 @@
 
 package bisq.desktop.common.view;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import lombok.Getter;
 
@@ -29,4 +31,6 @@ public abstract class TabModel extends NavigationModel {
     private final ObjectProperty<TabButton> selectedTabButton = new SimpleObjectProperty<>();
     @Getter
     private final List<TabButton> tabButtons = new ArrayList<>();
+    @Getter
+    private final BooleanProperty isNotificationVisible = new SimpleBooleanProperty();
 }

@@ -36,7 +36,7 @@ public class SettingsController extends TabController<SettingsModel> {
     private final SettingsView view;
 
     public SettingsController(ServiceProvider serviceProvider) {
-        super(new SettingsModel(), NavigationTarget.SETTINGS);
+        super(new SettingsModel(), NavigationTarget.SETTINGS, serviceProvider);
 
         this.serviceProvider = serviceProvider;
 

@@ -37,7 +37,7 @@ public class AccountAgeController extends TabController<AccountAgeModel> {
     private final ServiceProvider serviceProvider;
 
     public AccountAgeController(ServiceProvider serviceProvider) {
-        super(new AccountAgeModel(), NavigationTarget.ACCOUNT_AGE);
+        super(new AccountAgeModel(), NavigationTarget.ACCOUNT_AGE, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = new AccountAgeView(model, this);

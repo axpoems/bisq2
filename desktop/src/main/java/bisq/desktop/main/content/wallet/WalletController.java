@@ -38,7 +38,7 @@ public class WalletController extends TabController<WalletModel> {
     private final WalletView view;
 
     public WalletController(ServiceProvider serviceProvider) {
-        super(new WalletModel(), NavigationTarget.WALLET);
+        super(new WalletModel(), NavigationTarget.WALLET, serviceProvider);
 
         this.serviceProvider = serviceProvider;
 

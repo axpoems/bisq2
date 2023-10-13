@@ -77,13 +77,6 @@ public class NotificationPanelController implements Controller {
         if (navigationTarget == NavigationTarget.BISQ_EASY_OPEN_TRADES) {
             model.getIsVisible().set(false);
         }
-
-        model.getUseLessPadding().set(navigationTarget == NavigationTarget.DASHBOARD ||
-                navigationTarget == NavigationTarget.ACADEMY ||
-                navigationTarget == NavigationTarget.TRADE_PROTOCOLS ||
-                navigationTarget == NavigationTarget.BISQ_EASY ||
-                navigationTarget == NavigationTarget.USER ||
-                navigationTarget == NavigationTarget.SETTINGS);
     }
 
     @Override

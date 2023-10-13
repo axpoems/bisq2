@@ -37,7 +37,7 @@ public class TradeAppsController extends TabController<TradeAppsModel> {
     private final TradeAppsView view;
 
     public TradeAppsController(ServiceProvider serviceProvider) {
-        super(new TradeAppsModel(), NavigationTarget.TRADE_PROTOCOLS);
+        super(new TradeAppsModel(), NavigationTarget.TRADE_PROTOCOLS, serviceProvider);
 
         this.serviceProvider = serviceProvider;
 

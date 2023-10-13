@@ -37,7 +37,7 @@ public class BondedReputationController extends TabController<BondedReputationMo
     private final ServiceProvider serviceProvider;
 
     public BondedReputationController(ServiceProvider serviceProvider) {
-        super(new BondedReputationModel(), NavigationTarget.BSQ_BOND);
+        super(new BondedReputationModel(), NavigationTarget.BSQ_BOND, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = new BondedReputationView(model, this);

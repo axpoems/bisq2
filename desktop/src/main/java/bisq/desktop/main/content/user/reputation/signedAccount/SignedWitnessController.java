@@ -37,7 +37,7 @@ public class SignedWitnessController extends TabController<SignedWitnessModel> {
     private final ServiceProvider serviceProvider;
 
     public SignedWitnessController(ServiceProvider serviceProvider) {
-        super(new SignedWitnessModel(), NavigationTarget.SIGNED_WITNESS);
+        super(new SignedWitnessModel(), NavigationTarget.SIGNED_WITNESS, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = new SignedWitnessView(model, this);

@@ -30,7 +30,7 @@ public abstract class BondedRolesTabController<M extends BondedRolesTabModel> ex
     protected final ServiceProvider serviceProvider;
 
     public BondedRolesTabController(M model, NavigationTarget navigationTarget, ServiceProvider serviceProvider) {
-        super(model, navigationTarget);
+        super(model, navigationTarget, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = createAndGetView();

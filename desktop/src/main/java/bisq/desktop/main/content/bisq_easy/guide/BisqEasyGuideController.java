@@ -38,7 +38,7 @@ public class BisqEasyGuideController extends TabController<BisqEasyGuideModel> {
     private final ServiceProvider serviceProvider;
 
     public BisqEasyGuideController(ServiceProvider serviceProvider) {
-        super(new BisqEasyGuideModel(), NavigationTarget.BISQ_EASY_GUIDE);
+        super(new BisqEasyGuideModel(), NavigationTarget.BISQ_EASY_GUIDE, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         view = new BisqEasyGuideView(model, this);

@@ -44,7 +44,7 @@ public class BisqEasyController extends TabController<BisqEasyModel> {
     private final ChatNotificationService chatNotificationService;
 
     public BisqEasyController(ServiceProvider serviceProvider) {
-        super(new BisqEasyModel(), NavigationTarget.BISQ_EASY);
+        super(new BisqEasyModel(), NavigationTarget.BISQ_EASY, serviceProvider);
 
         this.serviceProvider = serviceProvider;
         notificationsService = serviceProvider.getNotificationsService();
