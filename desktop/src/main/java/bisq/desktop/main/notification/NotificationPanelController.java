@@ -17,6 +17,7 @@
 
 package bisq.desktop.main.notification;
 
+import bisq.bisq_easy.BisqEasyService;
 import bisq.chat.ChatChannelDomain;
 import bisq.chat.notifications.ChatNotificationService;
 import bisq.desktop.ServiceProvider;
@@ -29,9 +30,7 @@ import bisq.presentation.notifications.NotificationsService;
 import com.google.common.base.Joiner;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.fxmisc.easybind.EasyBind;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,9 +41,12 @@ public class NotificationPanelController implements Controller {
     private final NotificationPanelModel model;
     private final NotificationsService notificationsService;
     private boolean notificationSubscriptionDone;
+    private final BisqEasyService bisqEasyService;
 
     public NotificationPanelController(ServiceProvider serviceProvider) {
         notificationsService = serviceProvider.getNotificationsService();
+        bisqEasyService = serviceProvider.getBisqEasyService();
+
         model = new NotificationPanelModel();
         view = new NotificationPanelView(model, this);
     }
@@ -75,9 +77,6 @@ public class NotificationPanelController implements Controller {
                 });
             });
         }
-        if (navigationTarget == NavigationTarget.BISQ_EASY_OPEN_TRADES) {
-            onClose();
-        }
     }
 
     @Override
@@ -92,21 +91,21 @@ public class NotificationPanelController implements Controller {
 
     private void setNotificationPanelVisibility(String tradeId) {
         UIThread.run(() -> {
-            Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
-                    .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
-                    .collect(Collectors.toSet());
-            boolean shouldShowNotification = !tradeIdSet.isEmpty() && !notificationsService.isNotificationDismissed();
+            boolean shouldShowNotification = bisqEasyService.shouldShowTradeNotification()
+                    && Navigation.getCurrentNavigationTarget().get() != NavigationTarget.BISQ_EASY_OPEN_TRADES;
             model.getIsVisible().set(shouldShowNotification);
         });
     }
 
     void onClose() {
-        Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
-                .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
-                .collect(Collectors.toSet());
-        if (!tradeIdSet.isEmpty()) {
-            notificationsService.dismissNotificationId(tradeIdSet.iterator().next());
-        }
+        UIThread.run(() -> {
+            Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
+                    .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
+                    .collect(Collectors.toSet());
+            if (!tradeIdSet.isEmpty()) {
+                notificationsService.dismissNotificationId(tradeIdSet.iterator().next());
+            }
+        });
     }
 
     void onGoToOpenTrades() {
