@@ -29,7 +29,9 @@ import bisq.presentation.notifications.NotificationsService;
 import com.google.common.base.Joiner;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.fxmisc.easybind.EasyBind;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,30 +71,46 @@ public class NotificationPanelController implements Controller {
                             model.getContent().set(Res.get("notificationPanel.content.multiple", tradeIds,
                                     Res.get("notificationPanel.content.part2")));
                         }
-                        model.getIsVisible().set(!tradeIdSet.isEmpty());
                     }
                 });
             });
         }
         if (navigationTarget == NavigationTarget.BISQ_EASY_OPEN_TRADES) {
-            model.getIsVisible().set(false);
+            onClose();
         }
     }
 
     @Override
     public void onActivate() {
+        notificationsService.subscribe(this::setNotificationPanelVisibility);
     }
 
     @Override
     public void onDeactivate() {
+        notificationsService.unsubscribe(this::setNotificationPanelVisibility);
+    }
+
+    private void setNotificationPanelVisibility(String tradeId) {
+        UIThread.run(() -> {
+            Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
+                    .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
+                    .collect(Collectors.toSet());
+            boolean shouldShowNotification = !tradeIdSet.isEmpty() && !notificationsService.isNotificationDismissed();
+            model.getIsVisible().set(shouldShowNotification);
+        });
     }
 
     void onClose() {
-        model.getIsVisible().set(false);
+        Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
+                .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
+                .collect(Collectors.toSet());
+        if (!tradeIdSet.isEmpty()) {
+            notificationsService.dismissNotificationId(tradeIdSet.iterator().next());
+        }
     }
 
     void onGoToOpenTrades() {
-        model.getIsVisible().set(false);
+        onClose();
         Navigation.navigateTo(NavigationTarget.BISQ_EASY_OPEN_TRADES);
     }
 }

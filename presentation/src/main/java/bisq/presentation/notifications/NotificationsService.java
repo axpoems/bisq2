@@ -50,6 +50,8 @@ public class NotificationsService implements PersistenceClient<NotificationsStor
     private final Persistence<NotificationsStore> persistence;
     private NotificationsDelegate delegate;
     private final Set<Subscriber> subscribers = new HashSet<>();
+    @Getter
+    private boolean isNotificationDismissed = false;
 
     public NotificationsService(PersistenceService persistenceService) {
         persistence = persistenceService.getOrCreatePersistence(this, persistableStore);
@@ -101,6 +103,7 @@ public class NotificationsService implements PersistenceClient<NotificationsStor
     }
 
     public void addNotificationId(String notificationId) {
+        isNotificationDismissed = false;
         synchronized (persistableStore) {
             if (!containsNotificationId(notificationId)) {
                 getNotificationIdMap().put(notificationId,
@@ -131,6 +134,13 @@ public class NotificationsService implements PersistenceClient<NotificationsStor
             }
         }
     }
+
+    public void dismissNotificationId(String notificationId) {
+        if (!isNotificationDismissed) {
+            isNotificationDismissed = true;
+            subscribers.forEach(subscriber -> subscriber.onChanged(notificationId));
+        }
+    };
 
     public Set<String> getNotConsumedNotificationIds() {
         return getNotificationIdMap().entrySet().stream()

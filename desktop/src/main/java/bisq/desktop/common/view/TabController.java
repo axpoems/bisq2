@@ -51,10 +51,10 @@ public abstract class TabController<T extends TabModel> extends NavigationContro
             UIThread.run(() -> {
                 Set<String> tradeIdSet = notificationsService.getNotConsumedNotificationIds().stream()
                         .filter(id -> ChatNotificationService.getChatChannelDomain(id) == ChatChannelDomain.BISQ_EASY_OPEN_TRADES)
-                        .flatMap(id -> ChatNotificationService.findTradeId(id).stream())
                         .collect(Collectors.toSet());
-                model.getIsNotificationVisible().set(!tradeIdSet.isEmpty()
-                        && Navigation.getCurrentNavigationTarget().get() != NavigationTarget.BISQ_EASY_OPEN_TRADES);
+                boolean isNotificationVisible = !tradeIdSet.isEmpty() && !notificationsService.isNotificationDismissed()
+                        && Navigation.getCurrentNavigationTarget().get() != NavigationTarget.BISQ_EASY_OPEN_TRADES;
+                model.getIsNotificationVisible().set(isNotificationVisible);
             });
         });
     }

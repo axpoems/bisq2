@@ -42,6 +42,8 @@ import org.fxmisc.easybind.Subscription;
 @Slf4j
 public abstract class TabView<M extends TabModel, C extends TabController<M>> extends NavigationView<VBox, M, C>
         implements TransitionedView {
+    public static final Insets DEFAULT_TOP_PANE_PADDING = new Insets(30, 40, 0, 40);
+    private static final Insets NOTIFICATION_PADDING = new Insets(0, 40, 0, 40);
     protected Label headLine;
     protected final HBox tabs = new HBox();
     protected Region selectionMarker, line;
@@ -49,7 +51,7 @@ public abstract class TabView<M extends TabModel, C extends TabController<M>> ex
     protected final ScrollPane scrollPane;
     protected Pane lineAndMarker;
     protected Pane topBox;
-    private Subscription selectedTabButtonSubscription, rootWidthSubscription, layoutDoneSubscription;
+    private Subscription selectedTabButtonSubscription, rootWidthSubscription, layoutDoneSubscription, isNotificationVisibleSubscription;
     private ChangeListener<View<? extends Parent, ? extends Model, ? extends Controller>> viewListener;
 
     public TabView(M model, C controller) {
@@ -96,6 +98,11 @@ public abstract class TabView<M extends TabModel, C extends TabController<M>> ex
         model.getView().addListener(viewListener);
         onChildView(null, model.getView().get());
 
+        isNotificationVisibleSubscription = EasyBind.subscribe(
+                model.getIsNotificationVisible(),
+                newValue -> topBox.setPadding(newValue ? NOTIFICATION_PADDING : DEFAULT_TOP_PANE_PADDING)
+        );
+
         super.onViewAttachedInternal();
     }
 
@@ -117,6 +124,9 @@ public abstract class TabView<M extends TabModel, C extends TabController<M>> ex
         rootWidthSubscription.unsubscribe();
         if (layoutDoneSubscription != null) {
             layoutDoneSubscription.unsubscribe();
+        }
+        if (isNotificationVisibleSubscription != null) {
+            isNotificationVisibleSubscription.unsubscribe();
         }
         model.getTabButtons().forEach(tabButton -> tabButton.setOnAction(null));
         model.getView().removeListener(viewListener);
@@ -152,14 +162,7 @@ public abstract class TabView<M extends TabModel, C extends TabController<M>> ex
         } else {
             topBox = new HBox(tabs, Spacer.fillHBox(), headLine);
         }
-
-        Insets defaultPadding = new Insets(30, 40, 0, 40);
-        Insets notificationPadding = new Insets(0, 40, 0, 40);
-        topBox.setPadding(model.getIsNotificationVisible().get() ? notificationPadding : defaultPadding);
-        model.getIsNotificationVisible().addListener((observable, oldValue, newValue) -> {
-            System.out.println("New value is... " + newValue);
-            topBox.setPadding(newValue ? notificationPadding : defaultPadding);
-        });
+        topBox.setPadding(DEFAULT_TOP_PANE_PADDING);
     }
 
     protected void setupLineAndMarker() {
