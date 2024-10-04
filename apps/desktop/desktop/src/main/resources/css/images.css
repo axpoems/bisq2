@@ -1604,3 +1604,7 @@
 #stars-reputation-table {
     -fx-image: url("/images/reputation/rep-table.png");
 }
+
+#max-trade-amount {
+    -fx-image: url("/images/reputation/maximum-trade-amount.png");
+}

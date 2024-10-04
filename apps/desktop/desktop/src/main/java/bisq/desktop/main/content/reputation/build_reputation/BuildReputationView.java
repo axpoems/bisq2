@@ -17,13 +17,17 @@
 
 package bisq.desktop.main.content.reputation.build_reputation;
 
+import bisq.desktop.common.utils.ImageUtil;
 import bisq.desktop.common.view.View;
 import bisq.desktop.components.containers.Spacer;
 import bisq.desktop.components.controls.BisqMenuItem;
 import bisq.i18n.Res;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +45,14 @@ public class BuildReputationView extends View<VBox, BuildReputationModel, BuildR
 
         Label introLabelPart1 = new Label(Res.get("reputation.buildReputation.intro.part1"));
         Label introLabelPart2 = new Label(Res.get("reputation.buildReputation.intro.part2"));
+        ImageView formulaImage = ImageUtil.getImageViewById("max-trade-amount");
+        VBox formulaImageBox = new VBox(formulaImage);
+        formulaImageBox.setAlignment(Pos.CENTER);
+        formulaImageBox.getStyleClass().add("max-trade-amount-formula");
+        Tooltip.install(formulaImageBox, new Tooltip(Res.get("reputation.buildReputation.intro.part2.formula")));
+        Label introLabelPart2FormulaFootnote = new Label(Res.get("reputation.buildReputation.intro.part2.formulaFootnote"));
+        introLabelPart2FormulaFootnote.getStyleClass().add("max-trade-amount-formula-footnote");
+        Label introLabelPart3 = new Label(Res.get("reputation.buildReputation.intro.part3"));
 
         Label title = new Label(Res.get("reputation.buildReputation.title"));
         title.getStyleClass().add("reputation-title");
@@ -88,10 +100,13 @@ public class BuildReputationView extends View<VBox, BuildReputationModel, BuildR
         learnMoreLink.getStyleClass().addAll("reputation-learn-more-link");
         HBox learnMoreHBox = new HBox(4, learnMoreLabel, learnMoreLink);
 
+
         VBox contentBox = new VBox(20);
-        contentBox.getChildren().addAll(headlineLabel, introLabelPart1, introLabelPart2, title, burnAndBondBox,
-                signedAccountAndAgeBox, learnMoreHBox);
+        contentBox.getChildren().addAll(headlineLabel, introLabelPart1, introLabelPart2, formulaImageBox,
+                introLabelPart2FormulaFootnote, introLabelPart3, title, burnAndBondBox, signedAccountAndAgeBox, learnMoreHBox);
         contentBox.getStyleClass().add("bisq-common-bg");
+        VBox.setMargin(introLabelPart2FormulaFootnote, new Insets(-10, 0, 15, 0));
+        VBox.setMargin(title, new Insets(25, 0, 0, 0));
         root.getChildren().addAll(contentBox);
         root.setPadding(new Insets(0, 40, 20, 40));
         root.getStyleClass().add("reputation");
